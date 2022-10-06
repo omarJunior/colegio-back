@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
 from configuracion.models import (
@@ -7,6 +8,21 @@ from configuracion.models import (
 )
 
 # Create your models here.
+class AccesoUsuario(models.Model):
+    fk_user = models.ForeignKey(User, verbose_name="Usuario de acceso", null=True, blank=True, on_delete=models.SET_NULL, related_name="user_acceso")
+    estado = models.BooleanField(default=True)
+    fecha_creacion = models.DateTimeField(verbose_name="Fecha de creación", auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(verbose_name="Fecha de actualización", auto_now=True)
+
+    class Meta:
+        verbose_name="Acceso Usuario"
+        verbose_name_plural = "Acceso de Usuarios"
+
+    def __str__(self):
+        return str(self.fk_user)
+
+
+
 class Usuario(models.Model):
     fk_user = models.OneToOneField(User, verbose_name = "Usuario", null=True, blank=True, on_delete=models.CASCADE, related_name="user_usuario", unique=True)
     fk_asignatura = models.ForeignKey(Asignatura, verbose_name="Asignatura", null=True, blank=True, on_delete=models.CASCADE, related_name="asignatura_usuario")
