@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from configuracion.views import redirect_
 
 urlpatterns = [
+    path('', redirect_, name="redireccion"),
     path('admin/', admin.site.urls),
 ]

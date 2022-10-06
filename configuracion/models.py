@@ -5,9 +5,9 @@ from django.db import models
 
 # Create your models here.
 class TipoIdentificacion(models.Model):
-    codigo = models.CharField(verbose_name="Codigo de identificacion", max_lenght = 100, unique=True)
-    sigla = models.CharField(verbose_name="Sigla del tipo identificacion", max_lenght = 10)
-    descripcion = models.CharField(verbose_name="Tipo identificacion", max_lenght = 255, unique=True)
+    codigo = models.CharField(verbose_name="Codigo de identificacion", max_length = 100, unique=True)
+    sigla = models.CharField(verbose_name="Sigla del tipo identificacion", max_length = 10)
+    descripcion = models.CharField(verbose_name="Tipo identificacion", max_length = 255, unique=True)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(verbose_name="Fecha de creación", auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(verbose_name="Fecha de actualización", auto_now=True)
@@ -21,8 +21,8 @@ class TipoIdentificacion(models.Model):
 
 
 class Asignatura(models.Model):
-    codigo = models.CharField(verbose_name="Codigo asignatura", max_lenght = 100, unique=True)
-    nombre_asignatura = models.CharField(verbose_name="Asignatura", max_lenght = 255, null = True, blank=True)
+    codigo = models.CharField(verbose_name="Codigo asignatura", max_length = 100, unique=True)
+    nombre_asignatura = models.CharField(verbose_name="Asignatura", max_length = 255, null = True, blank=True)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(verbose_name="Fecha de creación", auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(verbose_name="Fecha de actualización", auto_now=True)
@@ -51,7 +51,7 @@ class Grado(models.Model):
 
 class Grupo(models.Model):
     fk_grado = models.ForeignKey(Grado, verbose_name="Grado", null=True, blank=True, on_delete=models.CASCADE, related_name="grado_grupo")
-    codigo = models.CharField(verbose_name="Codigo del grupo", max_lenght = 150, unique=True)
+    codigo = models.CharField(verbose_name="Codigo del grupo", max_length = 150, unique=True)
     nombre_grupo = models.CharField(verbose_name="Nombre del grupo", max_length = 255, null=True, blank=True)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(verbose_name="Fecha de creación", auto_now_add=True)

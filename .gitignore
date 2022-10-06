@@ -1,0 +1,11 @@
+.env
+*/__pycache__/*
+__pycache__
+*.pyc
+migrations
+media
+.DS_Store
+*.sqlite3
+env
+old_icons
+uploads
