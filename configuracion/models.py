@@ -67,7 +67,7 @@ class Grupo(models.Model):
 
 class Departamento(models.Model):
     codigo = models.CharField(verbose_name="Código del departamento", max_length=50)
-    descripcion = models.CharField(verbose_name="Descripción", max_length=255)
+    nombre_departamento = models.CharField(verbose_name="Nombre del departamento", max_length=255)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
@@ -77,15 +77,15 @@ class Departamento(models.Model):
         verbose_name_plural = "Departamentos"
 
     def __str__(self):
-        return str(self.descripcion)
+        return str(self.nombre_departamento)
 
 
 class Municipio(models.Model):
     fk_departamento = models.ForeignKey(Departamento, verbose_name="Departamento", on_delete=models.CASCADE)
-    descripcion = models.CharField(max_length=255, verbose_name="Descripción")
+    nombre_municipio = models.CharField( verbose_name="Nombre del municipio", max_length=255)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.descripcion)
+        return str(self.nombre_municipio)
