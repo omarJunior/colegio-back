@@ -19,6 +19,5 @@ from configuracion.views import redirect_
 
 urlpatterns = [
     path('', redirect_, name="redireccion"),
-    path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('admin/', admin.site.urls),
 ]

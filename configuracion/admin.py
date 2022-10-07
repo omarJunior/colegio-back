@@ -17,26 +17,10 @@ class GrupoInline(admin.StackedInline):
 
 class GradoAdmin(admin.ModelAdmin):
     inlines = (GrupoInline, )
-    fieldsets = (
-        ('Grado', {
-            'classes': ('grp-collapse grp-open',),
-            'fields': ('grado', 'activo',),
-        }),
-    )
     list_display = ('grado', 'activo', 'fecha_creacion')
     list_filter = ('grado',)
 
 class GrupoAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Grado', {
-            'classes': ('grp-collapse grp-open',),
-            'fields': ('codigo', 'nombre_grupo', 'activo',),
-        }),
-        ('Foraneas', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields' : ('fk_grado',),
-        }),
-    )
     list_display = ('get_grado', 'codigo', 'nombre_grupo', 'activo', 'fecha_creacion',)
     list_filter = ('nombre_grupo',)
     search_fields = ('codigo', 'nombre_grupo',)
