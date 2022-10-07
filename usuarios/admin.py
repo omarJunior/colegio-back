@@ -62,7 +62,7 @@ class CalificacionAdmin(admin.ModelAdmin):
             elif calificacion >= 4 and calificacion < 5:
                 sticker = "😎"
             elif calificacion == 5:
-                sticker = "✨✨"
+                sticker = "😍"
             return "{} {}".format(request.calificacion, sticker)
         return ""
     
