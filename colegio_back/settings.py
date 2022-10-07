@@ -166,7 +166,7 @@ SWAGGER_SETTINGS = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=730),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
 }
 
 # Static files (CSS, JavaScript, Images)
