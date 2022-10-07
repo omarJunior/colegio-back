@@ -36,7 +36,7 @@ class AccesoUsuarioAdmin(admin.ModelAdmin):
 
 
 class CalificacionAdmin(admin.ModelAdmin):
-    list_display = ('fk_user', 'fk_asignatura', 'get_calificacion', 'activo', 'fecha_creacion',)
+    list_display = ('get_user', 'get_asignatura', 'get_calificacion', 'activo', 'fecha_creacion',)
     list_filter = ('fk_user', 'fk_asignatura',)
 
     def get_user(self, request):
@@ -62,7 +62,7 @@ class CalificacionAdmin(admin.ModelAdmin):
             elif calificacion >= 4 and calificacion < 5:
                 sticker = "😎"
             elif calificacion == 5:
-                sticker = "🙀✨"
+                sticker = "✨✨"
             return "{} {}".format(request.calificacion, sticker)
         return ""
     
