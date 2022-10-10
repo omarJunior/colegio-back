@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from configuracion.views import redirect_
+from colegio_back.api_urls import urlpatterns as api_urls
 
 urlpatterns = [
     path('', redirect_, name="redireccion"),
+    path('api/', include(api_urls)),
     path('admin/', admin.site.urls),
 ]
