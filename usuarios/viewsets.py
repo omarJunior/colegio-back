@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.hashers import check_password, make_password
+from django.db.models import Q
 from rest_framework import viewsets, pagination, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -91,6 +92,10 @@ class RegistroUser(APIView):
         if password != password2:
             return Response({'error':'Asegurate de que las contraseñas coincidan'}, status=status.HTTP_400_BAD_REQUEST)
 
+        q_user = User.objects.filter(Q(email = email)| Q(username = email))
+        if q_user.count() > 0:
+            return Response({'error': 'Ya existe un usuario con ese username o email: {}'.format(email)}, status=status.HTTP_400_BAD_REQUEST)
+
         obj_user = User()
         obj_user.username = email
         obj_user.email = email
@@ -102,6 +107,7 @@ class RegistroUser(APIView):
 
         obj_persona = Usuario()
         obj_persona.fk_user = obj_user
+        obj_persona.save()
         if arr_pksAsignaturas is not None:
             for asig_pk in arr_pksAsignaturas:
                 obj_persona.fk_asignatura.add(Asignatura.objects.get(id = asig_pk))
