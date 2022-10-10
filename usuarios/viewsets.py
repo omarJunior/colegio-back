@@ -64,6 +64,8 @@ class LoginUser(APIView):
         return Response({'error': 'Usuario o contraseñas incorrectas'}, status=status.HTTP_400_BAD_REQUEST)
 
 class RegistroUser(APIView):
+    permission_classes = (AllowAny,)
+    
     def post(self, request, *args, **kwargs):
         nombres = request.data.get('nombres', None)
         apellidos = request.data.get('apellidos', None)
