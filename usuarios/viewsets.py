@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
+from rest_framework.decorators import action
 from .serializers import *
 from .models import *
 
@@ -23,6 +24,79 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
     pagination_class = PaginationClass
+    
+    #datos del usuario
+    @action(detail=False, methods=['get'], url_path="get_user", url_name="get-user")
+    def get_user(self, request):
+        if request.user.is_authenticated:
+            q_persona = Usuario.objects.filter(fk_user = request.user)
+            if q_persona.count() > 0:
+                value_persona = Usuario.objects.filter(fk_user = request.user).values('fk_grupo__nombre_grupo', 'fk_departamento__nombre_departamento', 'fk_municipio__nombre_municipio', 'fk_tipoIdentificacion__descripcion', 'numero_identificacion', 'genero', 'fecha_nacimiento', 'direccion', 'telefono',)
+                for value in value_persona:
+                    try:
+                        grupo = value.get('fk_grupo__nombre_grupo')
+                    except:
+                        grupo = ""
+
+                    try:
+                        departamento = value.get('fk_departamento__nombre_departamento')
+                    except:
+                        departamento = ""
+
+                    try:
+                        municipio = value.get('fk_municipio__nombre_municipio')
+                    except:
+                        municipio = ""
+
+                    try:
+                        tipo_identificacion = value.get('fk_tipoIdentificacion__descripcion')
+                    except:
+                        tipo_identificacion = ""
+
+                    try:
+                        numero_identificacion = value.get('numero_identificacion')
+                    except:
+                        numero_identificacion = ""
+
+                    try:
+                        genero = value.get('genero')
+                    except:
+                        genero = ""
+
+                    try:
+                        fecha_nacimiento = value.get('fecha_nacimiento')
+                    except:
+                        fecha_nacimiento = ""
+
+                    try:
+                        direccion = value.get('direccion')
+                    except:
+                        direccion = ""
+                    
+                    try:
+                        telefono = value.get('telefono')
+                    except:
+                        telefono = ""
+
+                userData = {
+                    "asignatura": [asig.nombre_asignatura for asig in q_persona[0].fk_asignatura.all()],
+                    "grupo ": grupo,
+                    "departamento": departamento ,
+                    "municipio": municipio,
+                    "tipo_identificacion": tipo_identificacion,
+                    "numero_identificacion": numero_identificacion,
+                    "genero": genero,
+                    "fecha_nacimiento": fecha_nacimiento,
+                    "direccion": direccion,
+                    "telefono": telefono,
+                }
+                return Response(userData, status=status.HTTP_200_OK)
+
+            return Response({'error': 'Ha ocurrido un error'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({'error': 'El usuario debe estar autenticado'}, status=status.HTTP_400_BAD_REQUEST)
+
+        
 
 class CalificacionViewSet(viewsets.ModelViewSet):
     queryset = Calificacion.objects.all()
