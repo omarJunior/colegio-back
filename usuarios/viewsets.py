@@ -21,9 +21,12 @@ class AccesoUsuarioViewSet(viewsets.ModelViewSet):
     pagination_class = PaginationClass
 
 class UsuarioViewSet(viewsets.ModelViewSet):
-    queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
     pagination_class = PaginationClass
+
+    def get_queryset(self):
+        qs = Usuario.objects.all()
+        return qs
     
     #datos del usuario
     @action(detail=False, methods=['get'], url_path="get_user", url_name="get-user")
@@ -79,6 +82,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
                         telefono = ""
 
                 userData = {
+                    "nombre_completo": request.user.get_full_name(),
+                    "username": request.user.username,
+                    "email": request.user.email,
                     "asignatura": [asig.nombre_asignatura for asig in q_persona[0].fk_asignatura.all()],
                     "grupo ": grupo,
                     "departamento": departamento ,
