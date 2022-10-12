@@ -1,6 +1,8 @@
+import base64
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.hashers import check_password, make_password
+from django.core.files.base import ContentFile
 from django.db.models import Q
 from rest_framework import viewsets, pagination, status
 from rest_framework.views import APIView
@@ -102,7 +104,80 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         
         return Response({'error': 'El usuario debe estar autenticado'}, status=status.HTTP_400_BAD_REQUEST)
 
-        
+    @action(detail=False, methods=['post'], url_path="update_user", url_name="update-user")
+    def update_user(self, request):
+        try:
+            foto_perfil = request.data['foto_perfil']
+        except:
+            foto_perfil = None
+
+        try:
+            username = request.data['username']
+        except:
+            username = None
+
+        try:
+            first_name = request.data['first_name']
+        except:
+            first_name = None
+
+        try:
+            last_name = request.data['last_name']
+        except:
+            last_name = None
+
+        try:
+            telefono = request.data['telefono']
+        except:
+            telefono = None
+
+        try:    
+            direccion = request.data['direccion']
+        except:
+            direccion = None
+
+        obj_user = User.objects.filter(id = request.user.id).first()
+        if obj_user is not None:
+            obj_usuario = Usuario.objects.filter(fk_user = obj_user).first()
+            if obj_usuario is not None:
+                if username is not None:
+                    q_user = User.objects.filter(username = username)
+                    if q_user.count() > 0:
+                        user = q_user.first()
+                        if user.id == obj_user.id:
+                            obj_user.username = username
+                        else:
+                            return Response({'error': 'El username ya existe en la base de datos'}, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        obj_user.username = username
+
+                if first_name is not None:
+                    obj_user.first_name = first_name
+                if last_name is not None:
+                    obj_user.last_name = last_name
+                obj_user.save()
+
+                if foto_perfil is not None:
+                    try:
+                        format, imgstr = foto_perfil.split(';base64,') 
+                        ext = format.split('/')[-1] 
+                        data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext) # You can save this
+                        obj_usuario.f_fotoPerfil = data
+                    except:
+                        pass
+
+                if telefono is not None:
+                    obj_usuario.telefono = telefono
+
+                if direccion is not None:
+                    obj_usuario.direccion = direccion
+                obj_usuario.save()
+
+                return Response({'msj': 'Datos actualizados correctamente'}, status=status.HTTP_200_OK)
+            
+            return Response({'error': 'Ha ocurrido un error'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'El usuario no existe'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CalificacionViewSet(viewsets.ModelViewSet):
     queryset = Calificacion.objects.all()

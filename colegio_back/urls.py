@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from configuracion.views import redirect_
 from colegio_back.api_urls import urlpatterns as api_urls
 
@@ -22,4 +24,4 @@ urlpatterns = [
     path('', redirect_, name="redireccion"),
     path('api/', include(api_urls)),
     path('admin/', admin.site.urls),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

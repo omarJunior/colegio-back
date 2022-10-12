@@ -33,6 +33,7 @@ class Usuario(models.Model):
     fk_municipio = models.ForeignKey(Municipio, verbose_name="Municipio", on_delete=models.SET_NULL, blank=True, null=True)
     fk_tipoIdentificacion = models.ForeignKey(TipoIdentificacion, verbose_name="Tipo identificacion", null=True, blank=True, on_delete=models.SET_NULL, related_name="tipoidentificacion_usuario")
     numero_identificacion = models.CharField(verbose_name="Numero de identificación", max_length=100, null=True, blank=True)
+    f_fotoPerfil = models.FileField(verbose_name="Foto de perfil", upload_to='uploads/', null=True, blank=True)
     choice_genero = (
        ('masculino', "Masculino"),
        ('femenino', "Femenino"),
