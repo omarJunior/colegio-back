@@ -177,6 +177,10 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             
             return Response({'error': 'Ha ocurrido un error'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'error': 'El usuario no existe'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['post'], url_path="register_group", url_name="register-group")
+    def register_group(self, request):
+        pass
 
 
 class CalificacionViewSet(viewsets.ModelViewSet):
