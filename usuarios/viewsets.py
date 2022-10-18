@@ -213,6 +213,9 @@ class LoginUser(APIView):
                     "refresh": str(refresh),
                     "access_token": str(refresh.access_token),
                 }
+
+                AccesoUsuario.objects.create(fk_user = obj_user)
+
                 return Response(userDict, status=status.HTTP_200_OK)
                 
             return Response({'error': 'El usuario se encuentra inactivo'}, status=status.HTTP_400_BAD_REQUEST)
