@@ -45,6 +45,7 @@ class Usuario(models.Model):
     direccion = models.CharField(verbose_name="Direccion", max_length = 100, null=True, blank=True)
     telefono = models.CharField(verbose_name="Telefono", max_length = 100, null=True, blank=True)
     calificacion = models.CharField(verbose_name="Calificación del profesor", max_length = 100, null=True, blank=True)
+    conteo = models.IntegerField(verbose_name="Conteo calificación", null=True, blank=True)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(verbose_name="Fecha de creación", auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(verbose_name="Fecha de actualización", auto_now=True)
@@ -71,3 +72,19 @@ class Calificacion(models.Model):
 
     def __str__(self):
         return str(self.fk_user) + ":" + str(self.fk_asignatura)
+
+
+class CalificacionPersona(models.Model):
+    fk_user = models.ForeignKey(User, verbose_name="Usuario que califica", on_delete = models.CASCADE, related_name ="user_califica")
+    fk_docente = models.ForeignKey(User, verbose_name="Docente calificado", on_delete=models.CASCADE, related_name="docente_calificacion")
+    calificacion = models.CharField(verbose_name = "Calificación del usuario", max_length=100, null=True, blank=True)
+    activo = models.BooleanField(default=True)
+    fecha_creacion = models.DateTimeField(verbose_name="Fecha de creación", auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(verbose_name="Fecha de actualización", auto_now=True)
+    
+    class Meta:
+        verbose_name = "Calificación persona"
+        verbose_name_plural = "Calificacion de personas"
+
+    def __str__(self):
+        return str(self.fk_docente)

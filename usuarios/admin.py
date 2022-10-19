@@ -70,6 +70,41 @@ class CalificacionAdmin(admin.ModelAdmin):
     get_asignatura.short_description = "Asignatura"
     get_calificacion.short_description = "Calificación"   
 
+
+class CalificacionPersonaAdmin(admin.ModelAdmin):
+    list_display =  (
+        'get_user'
+        'get_docente'
+        'get_calificacion',
+        'activo',
+        'fecha_creacion',
+    )
+    list_filter = ('fk_user', 'fk_docente',)
+
+    def get_user(self, request):
+        if request.fk_user:
+            return str(request.fk_user.get_full_name())
+        return ""
+
+    def get_docente(self, request):
+        if request.fk_docente:
+            return str(request.fk_docente.get_full_name())
+        return ""
+
+    def get_calificacion(self, request):
+        if request.calificacion:
+            strella = ""
+            for calif in range(0, int(request.calificacion)):
+                strella += "⭐"
+            return f"{strella}"
+        return ""
+
+    
+    get_user.short_description = "Nombre Completo del estudiante"
+    get_docente.short_description = "Nombre Completo del docente"
+    get_calificacion.short_description = "Calificación"   
+
+
 admin.site.unregister(User)
 admin.site.register(User, AdminUser)
 admin.site.register(AccesoUsuario, AccesoUsuarioAdmin)

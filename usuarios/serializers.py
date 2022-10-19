@@ -15,3 +15,8 @@ class CalificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calificacion
         fields = ('__all__')
+
+class CalificacionPersonaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CalificacionPersona
+        fields = ('__all__')

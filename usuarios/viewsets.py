@@ -226,6 +226,35 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         return Response({'msj': 'Datos registrados correctamente'}, status=status.HTTP_201_CREATED)
 
 
+    #registrar calificacion
+    @action(detail=False, methods=['post'], url_path="add_calification", url_name="add-calification")
+    def add_calification(self, request):
+        pk_profesor = request.data['pk_profesor']
+        calificacion = request.data['calificacion']
+
+        obj_persona = Usuario.objects.filter(fk_user__pk = pk_profesor).first()
+        if obj_persona is None:
+            return Response({'error': 'No existe una persona con el id: {}'.format(obj_persona.pk)}, status=status.HTTP_400_BAD_REQUEST)
+
+        q_calificacion = CalificacionPersona.objects.filter(fk_user = request.user, fk_docente = obj_persona.fk_user)
+        if q_calificacion.count() > 0:
+            return Response({'error': f'{request.user.get_full_name()} ya ha calificado al docente {obj_persona.fk_user.get_full_name()}'}, status=status.HTTP_400_BAD_REQUEST)
+    
+        contador = 1
+        if obj_persona.calificacion:
+            obj_persona.calificacion += calificacion  / obj_persona.conteo
+        else:
+            obj_persona.calificacion = calificacion 
+            obj_persona.conteo = contador
+
+        obj_persona.save()
+
+        obj_calificacion = CalificacionPersona()
+        obj_calificacion.fk_user = request.user
+        obj_calificacion.fk_docente = obj_persona.fk_user
+        obj_calificacion.calificacion = calificacion
+        obj_calificacion.save()
+        return Response({'msj': 'Calificación con exito'}, status=status.HTTP_201_CREATED)
 
 
 class CalificacionViewSet(viewsets.ModelViewSet):
@@ -249,6 +278,12 @@ class CalificacionViewSet(viewsets.ModelViewSet):
             qs = qs.filter(calificacion = calificacion)
 
         return qs 
+
+
+class CalificacionPersonaViewSet(viewsets.ModelViewSet):
+    queryset = CalificacionPersona.objects.all()
+    serializer_class = CalificacionPersonaSerializer
+    pagination_class = PaginationClass    
 
 
 class LoginUser(APIView):
