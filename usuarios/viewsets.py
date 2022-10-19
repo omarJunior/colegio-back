@@ -229,9 +229,26 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
 
 class CalificacionViewSet(viewsets.ModelViewSet):
-    queryset = Calificacion.objects.all()
     serializer_class = CalificacionSerializer
     pagination_class = PaginationClass
+
+    def get_queryset(self):
+        qs = Calificacion.objects.all().order_by('calificacion')
+
+        pk_usuario = self.request.query_params.get('pk_usuario')
+        pk_asignatura = self.request.query_params.get('pk_asignatura')
+        calificacion = self.request.query_params.get('calificacion')
+
+        if pk_usuario is not None:
+            qs = qs.filter(fk_user__pk = pk_usuario)
+
+        if pk_asignatura is not None:
+            qs = qs.filter(fk_asignatura__pk = pk_asignatura)
+
+        if calificacion is not None:
+            qs = qs.filter(calificacion = calificacion)
+
+        return qs 
 
 
 class LoginUser(APIView):
