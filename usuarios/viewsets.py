@@ -194,7 +194,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
         if not hasAsignatura:
             c_asignaturas = ','.join(arreglo_ids)
-            return Response({'error':f'Las siguientes asignaturas no existen: {c_asignaturas}.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error':f'Las siguientes asignaturas con el id no existen: {c_asignaturas}.'}, status=status.HTTP_400_BAD_REQUEST)
         q_asignatura = Asignatura.objects.filter(pk__in = asignaturas_pk)
         if q_asignatura.count() != len(asignaturas_pk):
             return Response({'error': 'Una de las asignaturas escogidas no existen'}, status=status.HTTP_400_BAD_REQUEST)
