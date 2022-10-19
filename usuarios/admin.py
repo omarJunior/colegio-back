@@ -30,7 +30,7 @@ class AccesoUsuarioAdmin(admin.ModelAdmin):
 
     def get_user(self, request):
         if request.fk_user:
-            return str(self.fk_user.get_full_name())
+            return str(self.fk_user.username)
         return ""
     get_user.short_description = "Nombre Completo"
 
@@ -41,7 +41,7 @@ class CalificacionAdmin(admin.ModelAdmin):
 
     def get_user(self, request):
         if request.fk_user:
-            return str(request.fk_user.get_full_name())
+            return str(request.fk_user.username)
         return ""
     
     def get_asignatura(self, request):
@@ -73,8 +73,8 @@ class CalificacionAdmin(admin.ModelAdmin):
 
 class CalificacionPersonaAdmin(admin.ModelAdmin):
     list_display =  (
-        'get_user'
-        'get_docente'
+        'get_user',
+        'get_docente',
         'get_calificacion',
         'activo',
         'fecha_creacion',
@@ -83,12 +83,12 @@ class CalificacionPersonaAdmin(admin.ModelAdmin):
 
     def get_user(self, request):
         if request.fk_user:
-            return str(request.fk_user.get_full_name())
+            return str(request.fk_user.username)
         return ""
 
     def get_docente(self, request):
         if request.fk_docente:
-            return str(request.fk_docente.get_full_name())
+            return str(request.fk_docente.username)
         return ""
 
     def get_calificacion(self, request):
@@ -109,3 +109,4 @@ admin.site.unregister(User)
 admin.site.register(User, AdminUser)
 admin.site.register(AccesoUsuario, AccesoUsuarioAdmin)
 admin.site.register(Calificacion, CalificacionAdmin)
+admin.site.register(CalificacionPersona, CalificacionPersonaAdmin)

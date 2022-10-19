@@ -30,6 +30,7 @@ class Usuario(models.Model):
     fk_user = models.OneToOneField(User, verbose_name = "Usuario", null=True, blank=True, on_delete=models.SET_NULL, related_name="user_usuario", unique=True)
     fk_asignatura = models.ManyToManyField(Asignatura, verbose_name="Asignatura")
     fk_grupo = models.ForeignKey(Grupo, verbose_name="Grupo", null=True, blank=True, on_delete=models.SET_NULL, related_name="grupo_usuario")
+    fk_grupoDocente = models.ManyToManyField(Grupo, verbose_name="Grupo de docente", blank=True)
     fk_departamento = models.ForeignKey(Departamento, verbose_name="Departamento", on_delete=models.SET_NULL, blank=True, null=True)
     fk_municipio = models.ForeignKey(Municipio, verbose_name="Municipio", on_delete=models.SET_NULL, blank=True, null=True)
     fk_tipoIdentificacion = models.ForeignKey(TipoIdentificacion, verbose_name="Tipo identificacion", null=True, blank=True, on_delete=models.SET_NULL, related_name="tipoidentificacion_usuario")
@@ -84,7 +85,7 @@ class CalificacionPersona(models.Model):
     
     class Meta:
         verbose_name = "Calificación persona"
-        verbose_name_plural = "Calificacion de personas"
+        verbose_name_plural = "Calificaciones de personas"
 
     def __str__(self):
         return str(self.fk_docente)

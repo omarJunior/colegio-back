@@ -242,7 +242,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     
         contador = 1
         if obj_persona.calificacion:
-            obj_persona.calificacion += calificacion  / obj_persona.conteo
+            obj_persona.calificacion = (int(obj_persona.calificacion) + int(calificacion))  / (obj_persona.conteo + contador)
+            obj_persona.conteo += contador
         else:
             obj_persona.calificacion = calificacion 
             obj_persona.conteo = contador
