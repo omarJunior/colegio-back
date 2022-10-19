@@ -178,9 +178,54 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Ha ocurrido un error'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'error': 'El usuario no existe'}, status=status.HTTP_400_BAD_REQUEST)
     
+    #registrar grupo y asignaturas
     @action(detail=False, methods=['post'], url_path="register_group", url_name="register-group")
     def register_group(self, request):
-        pass
+        asignaturas_pk = request.data['asignaturas_pk']
+        grupo_pk = request.data['grupo_pk']
+
+        arreglo_ids = []
+        hasAsignatura = True
+        for x in asignaturas_pk:
+            CONT_ASIGN = Asignatura.objects.filter(id = x).count()
+            if CONT_ASIGN == 0:
+                arreglo_ids.append(str(x))
+                hasAsignatura = False
+
+        if not hasAsignatura:
+            c_asignaturas = ','.join(arreglo_ids)
+            return Response({'error':f'Las siguientes asignaturas no existen: {c_asignaturas}.'}, status=status.HTTP_400_BAD_REQUEST)
+        q_asignatura = Asignatura.objects.filter(pk__in = asignaturas_pk)
+        if q_asignatura.count() != len(asignaturas_pk):
+            return Response({'error': 'Una de las asignaturas escogidas no existen'}, status=status.HTTP_400_BAD_REQUEST)
+
+        obj_grupo = Grupo.objects.filter(id = grupo_pk).first()
+        if obj_grupo is None:
+            return Response({'error': f'No existe un grupo con el id: {grupo_pk}'}, status=status.HTTP_400_BAD_REQUEST)
+
+        obj_usuario = Usuario.objects.filter(fk_user = request.user, fk_grupo__isnull=False).first()
+
+        if obj_usuario is not None:
+            if obj_usuario.fk_grupo.pk == obj_grupo.pk: 
+                for asign in asignaturas_pk:
+                    try:
+                        obj_usuario.fk_asignatura.add(Asignatura.objects.get(pk = asign))
+                    except:
+                        pass
+            else:
+                return Response({'error': f'El usuario: {obj_usuario.fk_user.get_full_name()} ya se encuentra asignado en el grupo: {obj_usuario.fk_grupo.nombre_grupo.upper()}'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            obj_usuario = Usuario.objects.filter(fk_user = request.user).first()
+            obj_usuario.fk_grupo = obj_grupo
+            obj_usuario.save()
+            for asig in asignaturas_pk:
+                try:
+                    obj_usuario.fk_asignatura.add(Asignatura.objects.get(pk = asig))
+                except:
+                    pass
+        return Response({'msj': 'Datos registrados correctamente'}, status=status.HTTP_201_CREATED)
+
+
 
 
 class CalificacionViewSet(viewsets.ModelViewSet):
