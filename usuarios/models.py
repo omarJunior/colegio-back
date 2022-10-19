@@ -1,4 +1,5 @@
 from email.policy import default
+from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
 from configuracion.models import (
@@ -43,6 +44,7 @@ class Usuario(models.Model):
     fecha_nacimiento = models.DateField(verbose_name="Fecha de nacimiento", null=True, blank=True)
     direccion = models.CharField(verbose_name="Direccion", max_length = 100, null=True, blank=True)
     telefono = models.CharField(verbose_name="Telefono", max_length = 100, null=True, blank=True)
+    calificacion = models.CharField(verbose_name="Calificación del profesor", max_length = 100, null=True, blank=True)
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(verbose_name="Fecha de creación", auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(verbose_name="Fecha de actualización", auto_now=True)
